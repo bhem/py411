@@ -33,3 +33,11 @@ token = response['token']
 query = 'tpb'
 response = api.torrents_search(query, limit=2)
 pp.pprint(response)
+
+id = response['torrents'][0]['id']
+
+filename = "%s.torrent" % id
+print("Download and write %s" % filename)
+response = api.torrents_download(id)
+with open(filename, 'wb') as f:
+    f.write(response)
