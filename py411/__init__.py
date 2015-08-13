@@ -46,6 +46,12 @@ class Py411(object):
                 raise(Exception("Error code %d - %s" % (parsed_response['code'], parsed_response['error'])))
         return parsed_response
 
+    def _get(self, endpoint, binary=False, **kwargs):
+        url = self._url(endpoint)
+        response = self._session.get(url, params=kwargs, headers=self._headers())
+        parsed_response = self._parse_response(response, binary=binary)
+        return parsed_response
+
     def users_profile(self, id, **kwargs):
         endpoint = '/users/profile/%s' % id
         return self._get(endpoint, binary=False, **kwargs)
@@ -66,8 +72,28 @@ class Py411(object):
         endpoint = '/torrents/download/%s' % id
         return self._get(endpoint, binary=True, **kwargs)
 
-    def _get(self, endpoint, binary=False, **kwargs):
+    def torrents_top(self, t, **kwargs):
+        try:
+            t = t.lower()
+        except:
+            pass
+        endpoint = '/torrents/top/%s' % t
+        return self._get(endpoint, binary=False, **kwargs)
+
+    def bookmarks(self, **kwargs):
+        endpoint = '/bookmarks'
+        return self._get(endpoint, binary=False, **kwargs)
+
+    def bookmarks_save(self, torrent_id, **kwargs):
+        endpoint = '/bookmarks/save/%s' % torrent_id
         url = self._url(endpoint)
-        response = self._session.get(url, params=kwargs, headers=self._headers())
-        parsed_response = self._parse_response(response, binary=binary)
+        response = self._session.post(url, data=kwargs, headers=self._headers())
+        parsed_response = self._parse_response(response, binary=False)
+        return parsed_response
+
+    def bookmarks_delete(self, torrent_id, **kwargs):
+        endpoint = '/bookmarks/delete/%s' % torrent_id
+        url = self._url(endpoint)
+        response = self._session.delete(url, data=kwargs, headers=self._headers())
+        parsed_response = self._parse_response(response, binary=False)
         return parsed_response

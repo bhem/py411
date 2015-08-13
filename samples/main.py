@@ -28,7 +28,8 @@ pp.pprint(response)
 response = api.terms_tree()
 pp.pprint(response)
 
-response = api._get('/torrents/top/today')
+#response = api._get('/torrents/top/today')
+response = api.torrents_top('today')
 pp.pprint(response)
 
 query = 'tpb'
@@ -42,3 +43,15 @@ print("Download and write %s" % filename)
 response = api.torrents_download(id)
 with open(filename, 'wb') as f:
     f.write(response)
+
+response = api.bookmarks()
+print(response)
+
+response = api.bookmarks_save(id)
+print(response)
+
+response = api.bookmarks_delete(id)
+print(response)
+
+response = api.bookmarks()
+print(response)
