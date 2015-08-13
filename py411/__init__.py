@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import requests
+import six
 
 """
 Py411 is a Python library for API
@@ -73,10 +74,8 @@ class Py411(object):
         return self._get(endpoint, binary=True, **kwargs)
 
     def torrents_top(self, t, **kwargs):
-        try:
+        if isinstance(t, six.string_types):
             t = t.lower()
-        except:
-            pass
         endpoint = '/torrents/top/%s' % t
         return self._get(endpoint, binary=False, **kwargs)
 
@@ -92,6 +91,9 @@ class Py411(object):
         return parsed_response
 
     def bookmarks_delete(self, torrent_id, **kwargs):
+        if hasattr(torrent_id, '__iter__'):
+            if not isinstance(torrent_id, six.string_types):
+                torrent_id = ",".join(torrent_id)
         endpoint = '/bookmarks/delete/%s' % torrent_id
         url = self._url(endpoint)
         response = self._session.delete(url, data=kwargs, headers=self._headers())
