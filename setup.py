@@ -39,7 +39,7 @@ setup(
 
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
 
-    install_requires=['requests'],
+    install_requires=['requests', 'six'],
 
     extras_require = {
         'dev': ['check-manifest', 'nose'],
