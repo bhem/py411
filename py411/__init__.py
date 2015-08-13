@@ -48,38 +48,23 @@ class Py411(object):
 
     def users_profile(self, id, **kwargs):
         endpoint = '/users/profile/%s' % id
-        url = self._url(endpoint)
-        response = self._session.get(url, params=kwargs, headers=self._headers())
-        parsed_response = self._parse_response(response)
-        return parsed_response
+        return self._get(endpoint, binary=False, **kwargs)
 
     def categories_tree(self, **kwargs):
         endpoint = '/categories/tree'
-        url = self._url(endpoint)
-        response = self._session.get(url, params=kwargs, headers=self._headers())
-        parsed_response = self._parse_response(response)
-        return parsed_response
+        return self._get(endpoint, binary=False, **kwargs)
 
     def terms_tree(self, **kwargs):
         endpoint = '/terms/tree'
-        url = self._url(endpoint)
-        response = self._session.get(url, params=kwargs, headers=self._headers())
-        parsed_response = self._parse_response(response)
-        return parsed_response
+        return self._get(endpoint, binary=False, **kwargs)
 
     def torrents_search(self, query, **kwargs):
         endpoint = '/torrents/search/%s' % query
-        url = self._url(endpoint)
-        response = self._session.get(url, params=kwargs, headers=self._headers())
-        parsed_response = self._parse_response(response)
-        return parsed_response
+        return self._get(endpoint, binary=False, **kwargs)
 
     def torrents_download(self, id, **kwargs):
         endpoint = '/torrents/download/%s' % id
-        url = self._url(endpoint)
-        response = self._session.get(url, params=kwargs, headers=self._headers())
-        parsed_response = self._parse_response(response, binary=True)
-        return parsed_response
+        return self._get(endpoint, binary=True, **kwargs)
 
     def _get(self, endpoint, binary=False, **kwargs):
         url = self._url(endpoint)
