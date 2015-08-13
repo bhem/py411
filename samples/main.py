@@ -46,10 +46,10 @@ pp.pprint(response)
 #import pandas as pd
 #df = pd.DataFrame(response['torrents'])
 
-id = response['torrents'][0]['id']
+torrent_id = response['torrents'][0]['id']
 
 print("torrents_download")
-filename = "%s.torrent" % id
+filename = "%s.torrent" % torrent_id
 print("Download and write %s" % filename)
 response = api.torrents_download(id)
 with open(filename, 'wb') as f:
@@ -61,13 +61,13 @@ print(response)
 
 print("bookmarks_save")
 try:
-    response = api.bookmarks_save(id)
+    response = api.bookmarks_save(torrent_id)
 except:
     print(traceback.format_exc())
 print(response)
 
 print("bookmarks_delete")
-response = api.bookmarks_delete(id)
+response = api.bookmarks_delete(torrent_id)
 print(response)
 
 print("bookmarks")
