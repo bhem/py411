@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 from py411 import Py411
-from py411_config import config
+#from py411_config import config
+from samples.py411_config import config
 
 import pprint
 import traceback
@@ -42,6 +43,8 @@ print("torrents_search")
 query = 'tpb'
 response = api.torrents_search(query, limit=2)
 pp.pprint(response)
+#import pandas as pd
+#df = pd.DataFrame(response['torrents'])
 
 id = response['torrents'][0]['id']
 
