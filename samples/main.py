@@ -30,14 +30,17 @@ token = response['token']
 #response = api.terms_tree()
 #print(response)
 
-query = 'tpb'
-response = api.torrents_search(query, limit=2)
+response = api._get('/torrents/top/today')
 pp.pprint(response)
 
-id = response['torrents'][0]['id']
+#query = 'tpb'
+#response = api.torrents_search(query, limit=2)
+#pp.pprint(response)
 
-filename = "%s.torrent" % id
-print("Download and write %s" % filename)
-response = api.torrents_download(id)
-with open(filename, 'wb') as f:
-    f.write(response)
+#id = response['torrents'][0]['id']
+
+#filename = "%s.torrent" % id
+#print("Download and write %s" % filename)
+#response = api.torrents_download(id)
+#with open(filename, 'wb') as f:
+#    f.write(response)

@@ -41,8 +41,9 @@ class Py411(object):
         if binary:
             return response.content
         parsed_response = response.json()
-        if 'error' in parsed_response.keys():
-            raise(Exception("Error code %d - %s" % (parsed_response['code'], parsed_response['error'])))
+        if isinstance(parsed_response, dict):
+            if 'error' in parsed_response.keys():
+                raise(Exception("Error code %d - %s" % (parsed_response['code'], parsed_response['error'])))
         return parsed_response
 
     def users_profile(self, id, **kwargs):
@@ -78,4 +79,10 @@ class Py411(object):
         url = self._url(endpoint)
         response = self._session.get(url, params=kwargs, headers=self._headers())
         parsed_response = self._parse_response(response, binary=True)
+        return parsed_response
+
+    def _get(self, endpoint, binary=False, **kwargs):
+        url = self._url(endpoint)
+        response = self._session.get(url, params=kwargs, headers=self._headers())
+        parsed_response = self._parse_response(response, binary=binary)
         return parsed_response
