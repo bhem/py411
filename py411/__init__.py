@@ -10,11 +10,18 @@ https://api.t411.io/
 
 URL_BASE = 'https://api.t411.io'
 
+try:
+    import pandas as pd
+    _PANDAS_INSTALLED = True
+except ImportError:
+    _PANDAS_INSTALLED = False
+
 class Py411(object):
     def __init__(self, url_base=URL_BASE):
         self._url_base = url_base
         self._session = requests
         self.token = None
+        self.to_dataframe = True
         print('Init API Client for %r' % self._url_base)
 
     def login(self, username, password):
@@ -84,6 +91,17 @@ class Py411(object):
     def torrents_search(self, query, **kwargs):
         endpoint = '/torrents/search/%s' % query
         response = self._get(endpoint, binary=False, **kwargs)
+        if self._return_dataframe:
+            key = "torrents"
+            try:
+                response[key] = pd.DataFrame(response[key])
+            except:
+                columns = ['added', 'category', 'categoryimage', 'categoryname', 
+                    'comments', 'id', 'isVerified', 'leechers', 'name', 'owner', 
+                    'privacy', 'rewritename', 'seeders', 'size', 'times_completed', 
+                    'username']
+                response[key] = pd.DataFrame(columns=columns)
+
         return response
 
     def torrents_download(self, id, **kwargs):
@@ -96,6 +114,8 @@ class Py411(object):
             t = t.lower()
         endpoint = '/torrents/top/%s' % t
         response = self._get(endpoint, binary=False, **kwargs)
+        if self._return_dataframe:
+            response = pd.DataFrame(response)
         return response
 
     def bookmarks(self, **kwargs):
@@ -115,3 +135,13 @@ class Py411(object):
         endpoint = '/bookmarks/delete/%s' % torrent_id
         response = self._delete(endpoint, data=kwargs)
         return response
+
+    @property
+    def _return_dataframe(self):
+        return _PANDAS_INSTALLED and self.to_dataframe
+
+    def get(self, partial_response, idx, col):
+        if not self._return_dataframe:
+            return partial_response[idx][col]
+        else:
+            return partial_response.loc[idx, col]

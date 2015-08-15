@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from py411 import Py411
+from py411 import Py411, _PANDAS_INSTALLED
 #from py411_config import config
 from samples.py411_config import config
 
@@ -46,7 +46,7 @@ pp.pprint(response)
 #import pandas as pd
 #df = pd.DataFrame(response['torrents'])
 
-torrent_id = response['torrents'][0]['id']
+torrent_id = api.get(response['torrents'], 0, 'id')
 
 print("torrents_download")
 filename = "%s.torrent" % torrent_id
